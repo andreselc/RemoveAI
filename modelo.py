@@ -33,7 +33,7 @@ def postprocess_image(result: torch.Tensor, im_size: list) -> np.ndarray:
 # Función para procesar un video
 def process_video(input_video_path, output_video_path, model, model_input_size):
     cap = cv2.VideoCapture(input_video_path)
-    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    fourcc = cv2.VideoWriter_fourcc(*'avc1')
     out = cv2.VideoWriter(output_video_path, fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))), True)
 
     while cap.isOpened():
@@ -68,6 +68,6 @@ def process_video(input_video_path, output_video_path, model, model_input_size):
 model_input_size = [512, 512]  # Ajusta este tamaño según las necesidades de tu modelo
 
 # Procesar el video
-input_video_path = 'input_video.mp4'
-output_video_path = 'output_video.avi'
+input_video_path = 'thatsMyOpinion.mp4'
+output_video_path = 'opinion.mp4'
 process_video(input_video_path, output_video_path, model, model_input_size)
