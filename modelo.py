@@ -7,9 +7,11 @@ from transformers import AutoModelForImageSegmentation
 import torch.nn.functional as F
 
 # Cargar el modelo
+print("Cargando el modelo...")
 model = AutoModelForImageSegmentation.from_pretrained("briaai/RMBG-1.4", trust_remote_code=True)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 model.to(device)
+print("Modelo cargado y enviado a:", device)
 
 # Definir funciones de preprocesamiento y postprocesamiento
 def preprocess_image(im: np.ndarray, model_input_size: list) -> torch.Tensor:
@@ -32,23 +34,44 @@ def postprocess_image(result: torch.Tensor, im_size: list) -> np.ndarray:
 
 # Función para procesar un video
 def process_video(input_video_path, output_video_path, model, model_input_size):
+    print(f"Abriendo el video de entrada: {input_video_path}")
     cap = cv2.VideoCapture(input_video_path)
-    fourcc = cv2.VideoWriter_fourcc(*'avc1')
-    out = cv2.VideoWriter(output_video_path, fourcc, 20.0, (int(cap.get(3)), int(cap.get(4))), True)
+    if not cap.isOpened():
+        print(f"Error al abrir el video de entrada: {input_video_path}")
+        return
+    
+    frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    out = cv2.VideoWriter(output_video_path, fourcc, fps, (frame_width, frame_height), True)
+    
+    if not out.isOpened():
+        print(f"Error al crear el video de salida: {output_video_path}")
+        return
 
+    frame_count = 0
     while cap.isOpened():
         ret, frame = cap.read()
         if not ret:
             break
 
+        frame_count += 1
+        print(f"Procesando cuadro {frame_count}")
         orig_im_size = frame.shape[0:2]
         image = preprocess_image(frame, model_input_size).to(device)
 
         # Inferencia
-        result = model(image)
+        with torch.no_grad():
+            result = model(image)
+        
+        # Ajustar el acceso al resultado según la estructura real
+        if isinstance(result, tuple):
+            result = result[0]
 
         # Post-proceso
-        result_image = postprocess_image(result[0][0], orig_im_size)
+        result_image = postprocess_image(result[0], orig_im_size)
 
         # Crear una imagen con fondo transparente
         pil_im = Image.fromarray(result_image)
@@ -59,15 +82,31 @@ def process_video(input_video_path, output_video_path, model, model_input_size):
         # Convertir de vuelta a formato de OpenCV
         no_bg_image = cv2.cvtColor(np.array(no_bg_image), cv2.COLOR_RGBA2BGRA)
 
-        out.write(no_bg_image)
+        # Verificar las dimensiones del cuadro
+        if no_bg_image.shape[1] != frame_width or no_bg_image.shape[0] != frame_height:
+            print(f"Error: Las dimensiones del cuadro {frame_count} no coinciden con el video de salida")
+            print(f"Dimensiones del cuadro: {no_bg_image.shape[1]}x{no_bg_image.shape[0]}, Dimensiones esperadas: {frame_width}x{frame_height}")
+            return
+        
+        # Convertir el frame a un formato compatible con VideoWriter (BGR)
+        bgr_frame = cv2.cvtColor(no_bg_image, cv2.COLOR_BGRA2BGR)
+
+        # Escribir el cuadro en el archivo de video
+        out.write(bgr_frame)
+
+        # Guardar algunos cuadros individuales para inspección
+        if frame_count % 30 == 0:
+            print(f"Guardando cuadro {frame_count} para inspección")
+            Image.fromarray(cv2.cvtColor(no_bg_image, cv2.COLOR_BGRA2RGBA)).save(f"frame_{frame_count}.png")
 
     cap.release()
     out.release()
+    print("Procesamiento de video completado.")
 
 # Definir el tamaño de entrada del modelo
-model_input_size = [512, 512]  # Ajusta este tamaño según las necesidades de tu modelo
+model_input_size = [480, 854]  # Ajusta esto según sea necesario
 
 # Procesar el video
-input_video_path = 'thatsMyOpinion.mp4'
+input_video_path = './thatsMyOpinion.mp4'
 output_video_path = 'opinion.mp4'
 process_video(input_video_path, output_video_path, model, model_input_size)
