@@ -1,3 +1,4 @@
+import os
 import cv2
 import numpy as np
 import torch
@@ -44,7 +45,7 @@ def process_video(input_video_path, output_video_path, model, model_input_size):
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = cap.get(cv2.CAP_PROP_FPS)
     
-    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    fourcc = cv2.VideoWriter_fourcc(*'DIVX')
     out = cv2.VideoWriter(output_video_path, fourcc, fps, (frame_width, frame_height), True)
     
     if not out.isOpened():
@@ -95,18 +96,22 @@ def process_video(input_video_path, output_video_path, model, model_input_size):
         out.write(bgr_frame)
 
         # Guardar algunos cuadros individuales para inspección
-        if frame_count % 30 == 0:
-            print(f"Guardando cuadro {frame_count} para inspección")
-            Image.fromarray(cv2.cvtColor(no_bg_image, cv2.COLOR_BGRA2RGBA)).save(f"frame_{frame_count}.png")
+        #if frame_count % 30 == 0:
+            #print(f"Guardando cuadro {frame_count} para inspección")
+            #Image.fromarray(cv2.cvtColor(no_bg_image, cv2.COLOR_BGRA2RGBA)).save(f"frame_{frame_count}.png")
 
     cap.release()
     out.release()
     print("Procesamiento de video completado.")
 
 # Definir el tamaño de entrada del modelo
-model_input_size = [480, 854]  # Ajusta esto según sea necesario
+model_input_size = [480, 854]  
 
 # Procesar el video
 input_video_path = './thatsMyOpinion.mp4'
-output_video_path = 'opinion.mp4'
+output_video_path = 'salida.avi'  
 process_video(input_video_path, output_video_path, model, model_input_size)
+
+# Abrir el video después de procesarlo
+if os.name == 'nt':  # Windows
+    os.system(f'start {output_video_path}')
