@@ -43,7 +43,7 @@ def process_and_respond(filename, is_hd):
         delayed_remove_file(output_video_path)
         return response
 
-    return send_file(output_video_path, as_attachment=True, download_name=f"processed_{filename}")
+    return send_file(output_video_path, as_attachment=True, download_name=f"processed_{filename}.mp4")
 
 @app.route('/upload_hd', methods=['POST'])
 def upload_hd():
