@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+    <!-- Tipografia -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <!-- // -->
+
+    <!-- Archivos Internos CSS-->
+    <link rel="stylesheet" href="/static/css/index.css">
+    <!-- // -->
+
+    <!-- Browser tab icon -->
+    <link rel="shortcut icon" type="x-icon" href="/static/img/logo-ucab3.png">
+    <!-- // -->
+    
+</head>
+
+<body>
+    
+    <div class="left">
+        <h1>Remueve el Fondo<br>de tu Video</h1>
+        <h4>100% Automatico y <span>Gratis</span></h4>
+        <video src="../static/video/homeVideo.mp4" autoplay loop muted></video>
+    </div>
+
+    <div class="right">
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="file" name="video" accept=".mp4,.avi,.mov,.wmv">
+            <button type="submit">Subir Video</button>
+        </form>
+        <h4>Formatos Soportados: .mp4, .avi, .mov, .wmv</h4>
+    </div>
+
+    <div class="cursor"></div>
+
+    <script>
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.pageX + 'px';
+        cursor.style.top = e.pageY + 'px';
+        });
+    </script>
+</body>
+</html>

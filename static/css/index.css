@@ -1,0 +1,123 @@
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+
+  scroll-behavior: smooth;
+  cursor: none;
+
+  color: #fff;
+  background: #201F20;
+}
+
+.cursor {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  
+  border-radius: 50%;
+  background-color: #93E3C0;
+  transform: scale(1);
+  transition: 0.1s;
+  transform: translate(-50%,-50%);
+
+  border: none;
+  pointer-events: none;
+  mix-blend-mode: difference;
+}
+
+body {
+display: flex;
+justify-content: space-between;
+align-items: center;
+height: 100vh;
+}
+
+.left,.right {
+display: flex;
+flex-direction: column;
+width: 45%; /* Define un ancho para cada lado */
+}
+
+h1 {
+font-family: 'Poppins';
+font-size: 4.2rem;
+background: none;
+}
+
+h4 {
+font-family: 'Inter';
+font-size: 1.5rem;
+font-weight: 400;
+color: #7b8080;
+}
+
+.left span {
+font-weight: 500;
+border-bottom: 5px solid #93E3C0;
+padding-bottom: 2px;
+background: none;
+}
+
+.left h1, .left h4 {
+margin-left: 5.5rem;
+}
+
+video {
+margin-top: 1rem;
+background: none;
+}
+
+/* Parte derecha */
+
+.right {
+width: 40rem;
+height: 22rem;
+background: #252424;
+display: flex;
+justify-content: center;
+align-items: center;
+text-align: center;
+margin-right: 5rem;
+border-radius: 40px;
+filter: drop-shadow(1px 8px 20px rgba(0, 0, 0, 0.5));
+}
+
+
+form {
+  
+  background: none;
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  background: none;
+  font-family: poppins;
+}
+
+button {
+  width: 50%;
+  padding: 25px 20px 25px 20px;
+  justify-content: center;
+  border-style: none;
+  border: 3px solid #93E3C0;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+  color: #fff;
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 17px;
+  background: none;
+  cursor: pointer;
+}
+
+.right img {
+margin-right: 10px;
+}
+
+.right h4 {
+font-size: 18px;
+background: none;
+}
