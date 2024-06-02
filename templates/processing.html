@@ -1,46 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        
-        <!-- Archivos Internos CSS-->
-        <link rel="stylesheet" href="/static/css/processing.css">
-        <!-- // -->
-        
-        <!-- Browser tab icon -->
-        <link rel="shortcut icon" type="x-icon" href="/static/img/logo-ucab3.png">
-        <!-- // -->
-        
-    </head>
-    <body>
-    
-        <div class="cointainer">
-        <div class="suelo">
-            <div class="top animation"></div>
-            <div class="down animation"></div>
-        </div>
-        <div class="suelo2">
-            <div class="top2 animation">
-                <div class="mango"></div>
-            </div>
-            <div class="down2 animation">
-                <div class="mango"></div>
-            </div>
-            <div class="blanco"></div>
-            <div class="tapagris"></div>
-            <div class="zigzag animation"></div>
-            <div class="boquilla">
-                <div class="boquita"></div>
-                <div class="boquitafinal"></div>
-            </div>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Procesando...</title>
+		<link rel="stylesheet" href="/static/css/processing.css" />
+		<link rel="shortcut icon" type="x-icon" href="/static/img/logo-ucab3.png" />
+	</head>
+	<body>
+		<div class="container">
+			<div class="suelo">
+				<div class="top animation"></div>
+				<div class="down animation"></div>
+			</div>
+			<div class="suelo2">
+				<div class="top2 animation">
+					<div class="mango"></div>
+				</div>
+				<div class="down2 animation">
+					<div class="mango"></div>
+				</div>
+				<div class="blanco"></div>
+				<div class="tapagris"></div>
+				<div class="zigzag animation"></div>
+				<div class="boquilla">
+					<div class="boquita"></div>
+					<div class="boquitafinal"></div>
+				</div>
 
-            <div class="bocaglobo">
-                <div class="globo animation"></div>
-            </div>
-        </div>
-    </div>
+				<div class="bocaglobo">
+					<div class="globo animation"></div>
+				</div>
+			</div>
+		</div>
 
-</body>
+		<script>
+			// Verifica el estado del procesamiento del video cada 5 segundos
+			setInterval(() => {
+				const urlParams = new URLSearchParams(window.location.search);
+				const filename = urlParams.get("filename");
+
+				fetch(`/check_processing?filename=${filename}`)
+					.then((response) => response.json())
+					.then((data) => {
+						if (data.processing_complete) {
+							window.location.href = `/results?filename=${filename}`;
+						}
+					});
+			}, 5000); // 5 segundos
+		</script>
+	</body>
 </html>

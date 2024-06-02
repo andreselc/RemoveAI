@@ -95,13 +95,12 @@ def process_video(input_video_path, output_video_path, model, model_input_size):
         # Escribir el cuadro en el archivo de video
         out.write(bgr_frame)
 
-        # Guardar algunos cuadros individuales para inspección
-        #if frame_count % 30 == 0:
-            #print(f"Guardando cuadro {frame_count} para inspección")
-            #Image.fromarray(cv2.cvtColor(no_bg_image, cv2.COLOR_BGRA2RGBA)).save(f"frame_{frame_count}.png")
-
     cap.release()
     out.release()
     print("Procesamiento de video completado.")
-
+    
+    # Crear archivo de marcador para indicar que el procesamiento ha terminado
+    flag_file_path = output_video_path + ".done"
+    with open(flag_file_path, 'w') as flag_file:
+        flag_file.write('done')
 
