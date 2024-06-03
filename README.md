@@ -10,6 +10,12 @@ Según BriaAI, el modelo funciona de mejor forma dependiendo de la categoría de
 
 ![Porcentajes de éxito en categoría de imágenes usadas en el modelo](REMOVEAI/../images/categorias.png)
 
+### Imágenes de ejemplo:
+![Imágenes de ejemplo](REMOVEAI/../images/ejemplos.png)
+
+
+
+
 
 
     
