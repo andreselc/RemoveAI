@@ -13,8 +13,23 @@ Según BriaAI, el modelo funciona de mejor forma dependiendo de la categoría de
 ### Imágenes de ejemplo:
 ![Imágenes de ejemplo](REMOVEAI/../images/ejemplos.png)
 
+Ahora bien, el proyecto solicita aplicar un modelo que le quite los fondos a varios video, para ello, se adaptó el código de la siguiente manera:
 
+### Carga del modelo:
+1. Primeramente se carga el modelo de segmentación de imágenes RMBG-1.4 utilizando la función from_pretrained de la biblioteca transformers. Posteriormente, se verifica si hay una GPU disponible y se asigna el modelo al dispositivo correspondiente (GPU si está disponible, de lo contrario, CPU), y por último, se muestra un mensaje indicando quela carga completada del modelo. 
 
+-Snippet:
+
+  ```bash
+print("Cargando el modelo...")
+model = AutoModelForImageSegmentation.from_pretrained("briaai/RMBG-1.4", trust_remote_code=True)
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+model.to(device)
+print("Modelo cargado y enviado a:", device)
+```   
+
+### Funciones de preprocesamiento y postprocesamiento:
+2. 
 
 
 
