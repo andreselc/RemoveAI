@@ -29,9 +29,40 @@ print("Modelo cargado y enviado a:", device)
 ```   
 
 ### Funciones de preprocesamiento y postprocesamiento:
-2. 
 
+-Preprocesamiento: Este método verifica si la imagen tiene menos de 3 canales y ajusta su forma si es necesario. Convierte la imagen a un tensor de PyTorch y reordena las dimensiones. Interpola la imagen al tamaño de entrada del modelo utilizando el modo 'bilinear'. Normaliza la imagen dividiendo por 255 y luego normalizando los valores entre 0.5 y 1.0. Devuelve la imagen preprocesada como un tensor de PyTorch.
 
+La interpolación es necesaria porque el modelo de segmentación de imágenes requiere que las imágenes de entrada tengan un tamaño específico. Si la imagen original no coincide con ese tamaño, se necesita interpolar para ajustar las dimensiones. El método de interpolación utilizado es el modo 'bilinear', que es un método común para interpolar imágenes que combina la precisión de la interpolación lineal con la suavidad de la interpolación cuadrática.
 
-    
+El modo 'bilinear' es una técnica de interpolación que combina la precisión de la interpolación lineal con la suavidad de la interpolación cuadrática. Esto permite una interpolación más precisa y suave, especialmente en áreas donde la imagen original tiene pocos píxeles. En este caso, se utiliza para ajustar el tamaño de la imagen de entrada al tamaño de entrada del modelo.
 
+Por otro lado, la normalización permite lograr cierta uniformidad entre las imágenes, estandarizando sus dimensiones como el ancho de las letras y su tamaño vertical.
+
+-Snippet:
+
+```bash
+def preprocess_image(im: np.ndarray, model_input_size: list) -> torch.Tensor:
+    if len(im.shape) < 3:
+        im = im[:, :, np.newaxis]
+    im_tensor = torch.tensor(im, dtype=torch.float32).permute(2, 0, 1)
+    im_tensor = F.interpolate(torch.unsqueeze(im_tensor, 0), size=model_input_size, mode='bilinear')
+    image = torch.divide(im_tensor, 255.0)
+    image = normalize(image, [0.5, 0.5, 0.5], [1.0, 1.0, 1.0])
+    return image
+
+```    
+-Postprocesamiento: Interpola el resultado de la segmentación al tamaño original de la imagen. Lo que hace es calcular el máximo y mínimo de los valores en el resultado, para luego normalizar los valores del resultado entre 0 y 1. Posteriormente, convierte el resultado a un array de NumPy con valores entre 0 y 255, y luego reordena las dimensiones del array y lo convierte a un array de tipo uint8. Al final devuelve el array de la imagen postprocesada.
+
+-Snippet:
+
+```bash
+def postprocess_image(result: torch.Tensor, im_size: list) -> np.ndarray:
+    result = torch.squeeze(F.interpolate(result, size=im_size, mode='bilinear'), 0)
+    ma = torch.max(result)
+    mi = torch.min(result)
+    result = (result - mi) / (ma - mi)
+    im_array = (result * 255).permute(1, 2, 0).cpu().data.numpy().astype(np.uint8)
+    im_array = np.squeeze(im_array)
+    return im_array
+
+```    
