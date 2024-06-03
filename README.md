@@ -146,3 +146,21 @@ Por último, se crea la imagen con el fondo transparente, se convierte en format
     print("Procesamiento de video completado.")
 
 ```   
+
+## Librerías y dependencias utilizadas:
+
+1. cv2 : Es una biblioteca de OpenCV que se utiliza para trabajar con imágenes y video. Se utiliza para leer y escribir archivos de video, así como para realizar operaciones de procesamiento de imágenes.
+
+2. numpy: Es una biblioteca de Python que se utiliza para realizar operaciones numéricas. Se utiliza para manipular arrays y matrices numéricas, lo que es útil para el procesamiento de imágenes y video.
+
+3. torch: Es una biblioteca de Python que se utiliza para trabajar con tensores y modelos de aprendizaje automático. Se utiliza para cargar y utilizar modelos de aprendizaje automático, así como para realizar operaciones de procesamiento de datos numéricos.
+
+4. torchvision.transforms.functional: es un módulo de PyTorch que se utiliza para realizar transformaciones en imágenes. Se utiliza para normalizar las imágenes y ajustar sus dimensiones para que coincidan con las especificaciones del modelo de aprendizaje automático.
+
+5. PIL.Image: Es una biblioteca de Python que se utiliza para trabajar con imágenes. Se utiliza para leer y escribir archivos de imagen, así como para realizar operaciones de procesamiento de imágenes.
+
+6. transformers: Es una biblioteca de Python que se utiliza para trabajar con modelos de lenguaje natural y segmentación de imágenes. Se utiliza para cargar y utilizar modelos de aprendizaje automático para segmentación de imágenes.
+
+7. torch.nn.functional: torch.nn.functional es un módulo de PyTorch que se utiliza para realizar operaciones de red neuronal. Se utiliza para aplicar operaciones de procesamiento de datos numéricos y para realizar inferencias en modelos de aprendizaje automático.
+
+8. Flask: Es una biblioteca de Python para crear aplicaciones web. Es un framework "micro" que proporciona las herramientas básicas para crear aplicaciones web, como URL routing y renderizado de páginas. 
