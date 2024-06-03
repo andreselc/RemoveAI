@@ -30,8 +30,8 @@ def delayed_remove_file(path, delay=5):
 
     threading.Thread(target=remove).start()
 
-@app.route('/upload_video', methods=['POST'])
-def upload_video_endpoint():
+@app.route('/upload_hd', methods=['POST'])
+def upload_hd():
     file = request.files['video']
     filename = file.filename
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -39,7 +39,22 @@ def upload_video_endpoint():
 
     # Inicia el procesamiento del video
     output_video_path = os.path.join(app.config['RESULTS_FOLDER'], f"processed_{filename}")
-    model_input_size = [720, 1280] if "hd" in filename.lower() else [480, 854]  # Tamaños para HD y no HD
+    model_input_size = [720, 1280]  # Tamaños para HD
+    threading.Thread(target=process_video, args=(filepath, output_video_path, model, model_input_size)).start()
+
+    # Redirige a la página de carga mientras se procesa el video
+    return redirect(url_for('carga', filename=filename))
+
+@app.route('/upload_non_hd', methods=['POST'])
+def upload_non_hd():
+    file = request.files['video']
+    filename = file.filename
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file.save(filepath)
+
+    # Inicia el procesamiento del video
+    output_video_path = os.path.join(app.config['RESULTS_FOLDER'], f"processed_{filename}")
+    model_input_size = [480, 854]  # Tamaños para no HD
     threading.Thread(target=process_video, args=(filepath, output_video_path, model, model_input_size)).start()
 
     # Redirige a la página de carga mientras se procesa el video
@@ -60,8 +75,8 @@ def check_processing():
     output_video_path = os.path.join(app.config['RESULTS_FOLDER'], f"processed_{filename}")
     flag_file_path = output_video_path + ".done"
     
-    # Verificación del archivo de marcador
-    processing_complete = os.path.exists(flag_file_path)
+    # Verificación del archivo de marcador y del tamaño del archivo procesado
+    processing_complete = os.path.exists(flag_file_path) and os.path.getsize(output_video_path) > 0
 
     return jsonify({'processing_complete': processing_complete})
 
@@ -87,6 +102,20 @@ def download(filename):
         return response
     
     return send_file(output_video_path, as_attachment=True, download_name=f"processed_{filename}")
+
+@app.route('/delete_and_home/<filename>', methods=['POST'])
+def delete_and_home(filename):
+    output_video_path = os.path.join(app.config['RESULTS_FOLDER'], f"processed_{filename}")
+    flag_file_path = output_video_path + ".done"
+    upload_file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    
+    # Verificar si ambos archivos existen antes de intentar eliminarlos
+    if os.path.exists(output_video_path) and os.path.exists(flag_file_path):
+        delayed_remove_file(output_video_path,0)
+        delayed_remove_file(flag_file_path,0)
+        delayed_remove_file(upload_file_path,0)
+    
+    return redirect(url_for('home'))
 
 @app.route('/home')
 def home():

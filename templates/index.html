@@ -7,7 +7,6 @@
 		<link rel="stylesheet" href="/static/css/index.css" />
 		<link rel="shortcut icon" type="x-icon" href="/static/img/logo-ucab3.png" />
 	</head>
-
 	<body>
 		<div class="left">
 			<h1>Remueve el Fondo<br />de tu Video</h1>
@@ -16,13 +15,17 @@
 		</div>
 
 		<div class="right">
-			<form
-				id="uploadForm"
-				action="/upload_video"
-				method="post"
-				enctype="multipart/form-data"
-			>
+			<form id="uploadForm" method="post" enctype="multipart/form-data">
 				<input type="file" name="video" accept=".mp4,.avi,.mov,.wmv" required />
+				<div>
+					<label>
+						<input type="radio" name="video_quality" value="hd" required /> HD
+					</label>
+					<label>
+						<input type="radio" name="video_quality" value="non_hd" required />
+						No HD
+					</label>
+				</div>
 				<button type="submit">Subir Video</button>
 			</form>
 			<h4>Formatos Soportados: .mp4, .avi, .mov, .wmv</h4>
@@ -41,10 +44,21 @@
 				.getElementById("uploadForm")
 				.addEventListener("submit", function (event) {
 					const fileInput = document.querySelector('input[name="video"]');
+					const videoQuality = document.querySelector(
+						'input[name="video_quality"]:checked'
+					);
 					if (!fileInput.files.length) {
 						event.preventDefault();
 						alert("Por favor, selecciona un archivo de video.");
+						return;
 					}
+					if (!videoQuality) {
+						event.preventDefault();
+						alert("Por favor, selecciona la calidad del video.");
+						return;
+					}
+					this.action =
+						videoQuality.value === "hd" ? "/upload_hd" : "/upload_non_hd";
 				});
 		</script>
 	</body>

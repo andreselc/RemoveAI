@@ -13,5 +13,9 @@
 			Tu navegador no soporta el elemento de video.
 		</video>
 		<a href="/download/{{ filename }}">Descargar Video Procesado</a>
+		<br />
+		<form action="/delete_and_home/{{ filename }}" method="post">
+			<button type="submit">Subir otro video</button>
+		</form>
 	</body>
 </html>

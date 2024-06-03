@@ -103,4 +103,3 @@ def process_video(input_video_path, output_video_path, model, model_input_size):
     flag_file_path = output_video_path + ".done"
     with open(flag_file_path, 'w') as flag_file:
         flag_file.write('done')
-
