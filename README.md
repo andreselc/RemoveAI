@@ -164,3 +164,17 @@ Por último, se crea la imagen con el fondo transparente, se convierte en format
 7. torch.nn.functional: torch.nn.functional es un módulo de PyTorch que se utiliza para realizar operaciones de red neuronal. Se utiliza para aplicar operaciones de procesamiento de datos numéricos y para realizar inferencias en modelos de aprendizaje automático.
 
 8. Flask: Es una biblioteca de Python para crear aplicaciones web. Es un framework "micro" que proporciona las herramientas básicas para crear aplicaciones web, como URL routing y renderizado de páginas. 
+
+## Comando para instalar dependencias:
+
+1. pip install opencv-python numpy torch torchvision transformers
+2. pip install flask  
+
+## Ejecución del proyecto
+
+Al instalar todas las dependencias anteriores, ejecute el archivo "app.py" de python y espere unos segundos para que el servidor empiece a ejecutarse. Después de unos 20 segundos, puede colocar en cualquier navegador la siguiente ruta:
+
+```bash
+http://127.0.0.1:5000/home
+
+```   
